@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const searchParams = useSearchParams();
 
@@ -17,7 +17,9 @@ export default function CheckoutPage() {
   }, []);
 
   const checkoutItems = selectedProductId
-    ? cartItems.filter((item) => item._id === selectedProductId)
+    ? cartItems
+        .filter((item) => item._id === selectedProductId)
+        .map((item) => ({ ...item, quantity: 1 }))
     : cartItems;
 
   const totalPrice = checkoutItems.reduce(
@@ -85,5 +87,13 @@ export default function CheckoutPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading checkout...</div>}>
+      <CheckoutContent />
+    </Suspense>
   );
 }
