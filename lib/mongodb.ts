@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
+if (!uri) {
   throw new Error("MONGODB_URI is not defined");
 }
+
+const MONGODB_URI: string = uri;
 
 export async function connectDB() {
   try {
